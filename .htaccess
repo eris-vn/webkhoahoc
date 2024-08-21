@@ -1,0 +1,117 @@
+# Bật module rewrite
+RewriteEngine On
+RewriteBase /
+
+# Chặn truy cập trực tiếp vào các tập tin PHP ngoại trừ index.php
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} !^/index\.php$
+RewriteRule \.php$ - [F]
+
+# TRANG 404 ( KHÔNG TÌM THẤY )
+ErrorDocument 404 /404
+
+### CLIENT
+RewriteRule ^$ index.php?controller=client/HomeController&action=homepage [QSA,L]
+RewriteRule ^404$ index.php?controller=client/HomeController&action=page_not_found [QSA,L]
+RewriteRule ^contact$ index.php?controller=client/HomeController&action=show_contact [QSA,L]
+RewriteRule ^about$ index.php?controller=client/HomeController&action=show_about [QSA,L]
+
+
+RewriteRule ^login$ index.php?controller=client/AuthController&action=loginpage [QSA,L]
+RewriteRule ^forgot$ index.php?controller=client/AuthController&action=forgotpage [QSA,L]
+RewriteRule ^auth/register$ index.php?controller=client/AuthController&action=on_regist [QSA,L]
+RewriteRule ^auth/login$ index.php?controller=client/AuthController&action=on_login [QSA,L]
+RewriteRule ^auth/logout$ index.php?controller=client/AuthController&action=on_logout [QSA,L]
+RewriteRule ^api/auth/forgot/create$ index.php?controller=client/AuthController&action=send_code [QSA,L]
+RewriteRule ^api/auth/forgot/verify$ index.php?controller=client/AuthController&action=on_reset [QSA,L]
+
+
+
+RewriteRule ^danh-muc/(.*)$ index.php?role=client&page=category&slug=$1 [QSA,L]
+
+### USER
+RewriteRule ^user/dashboard$ index.php?controller=client/user/DashboardController&action=show_page&middleware=auth [QSA,L]
+RewriteRule ^user/setting$ index.php?controller=client/user/SettingController&action=show_page&middleware=auth [QSA,L]
+RewriteRule ^api/user/setting/edit$ index.php?controller=client/user/SettingController&action=edit&middleware=auth_api [QSA,L]
+RewriteRule ^user/profile$ index.php?controller=client/user/ProfileController&action=show_page&middleware=auth [QSA,L]
+RewriteRule ^api/user/setting/change_pass$ index.php?controller=client/user/SettingController&action=change_pass&middleware=auth_api [QSA,L]
+
+
+
+
+# USER COURSE
+
+RewriteRule ^user/enrolled-courses$ index.php?controller=client/user/EnrolledController&action=show&middleware=auth [QSA,L]
+RewriteRule ^user/payment-history$ index.php?controller=client/user/InvoiceController&action=show_page&middleware=auth [QSA,L]
+RewriteRule ^user/quiz-history$ index.php?controller=client/user/QuestionController&action=show_page&middleware=auth [QSA,L]
+RewriteRule ^api/user/courses/certificate$ index.php?controller=client/user/CourseController&action=get_certificate&middleware=auth_api [QSA,L]
+RewriteRule ^user/course/certificate/(.*)$ index.php?controller=client/user/CourseController&action=certificate_info&middleware=auth&course_id=$1 [QSA,L]
+
+
+RewriteRule ^user/my-course$ index.php?controller=client/user/CourseController&action=show_page&middleware=instructor [QSA,L]
+RewriteRule ^user/course/create$ index.php?controller=client/user/CourseController&action=show_create&middleware=instructor [QSA,L]
+RewriteRule ^user/course/edit/(.*)$ index.php?controller=client/user/CourseController&action=show_edit&middleware=instructor&course_id=$1 [QSA,L]
+RewriteRule ^user/course/manage/(.*)$ index.php?controller=client/user/CourseController&action=show_manage&middleware=instructor&course_id=$1 [QSA,L]
+RewriteRule ^user/course/build-lesson/(.*)$ index.php?controller=client/user/CourseController&action=show_build_lesson&middleware=instructor&course_id=$1 [QSA,L]
+RewriteRule ^api/user/course/create$ index.php?controller=client/user/CourseController&action=create&middleware=instructor_api [QSA,L]
+RewriteRule ^api/user/course/edit$ index.php?controller=client/user/CourseController&action=edit&middleware=instructor_api [QSA,L]
+RewriteRule ^api/user/course/delete$ index.php?controller=client/user/CourseController&action=delete&middleware=instructor_api [QSA,L]
+
+
+# USER LESSON
+RewriteRule ^api/user/lesson/info$ index.php?controller=client/user/LessonController&action=info&middleware=instructor_api [QSA,L]
+RewriteRule ^api/user/lesson/create$ index.php?controller=client/user/LessonController&action=create&middleware=instructor_api [QSA,L]
+RewriteRule ^api/user/lesson/edit$ index.php?controller=client/user/LessonController&action=edit&middleware=instructor_api [QSA,L]
+RewriteRule ^api/user/lesson/delete$ index.php?controller=client/user/LessonController&action=delete&middleware=instructor_api [QSA,L]
+
+# QUESTION
+RewriteRule ^api/user/question/create$ index.php?controller=client/user/QuestionController&action=create&middleware=instructor_api [QSA,L]
+RewriteRule ^api/user/question/info$ index.php?controller=client/user/QuestionController&action=info&middleware=instructor_api [QSA,L]
+RewriteRule ^api/user/question/edit$ index.php?controller=client/user/QuestionController&action=edit&middleware=instructor_api [QSA,L]
+RewriteRule ^api/user/question/delete$ index.php?controller=client/user/QuestionController&action=delete&middleware=instructor_api [QSA,L]
+
+
+
+# USER CHAPTER
+RewriteRule ^api/user/chapter/create$ index.php?controller=client/user/ChapterController&action=create&middleware=instructor_api [QSA,L]
+
+
+# COURSE
+RewriteRule ^course/(.*)/details$ index.php?controller=client/CourseController&action=view_details&course_slug=$1 [QSA,L]
+RewriteRule ^course/(.*)/lesson$ index.php?controller=client/LessonController&action=view&course_slug=$1&middleware=auth [QSA,L]
+RewriteRule ^course/(.*)/quiz$ index.php?controller=client/QuizController&action=view&course_slug=$1&middleware=auth [QSA,L]
+RewriteRule ^api/course/lesson/mark$ index.php?controller=client/LessonController&action=mark_completed&middleware=auth_api [QSA,L]
+RewriteRule ^api/course/quiz/submit$ index.php?controller=client/QuizController&action=submit&middleware=auth_api [QSA,L]
+RewriteRule ^api/course/review/submit$ index.php?controller=client/CourseController&action=post_review&middleware=auth_api [QSA,L]
+
+
+# CART
+RewriteRule ^cart$ index.php?controller=client/CartController&action=show&middleware=auth [QSA,L]
+RewriteRule ^api/cart/add index.php?controller=client/CartController&action=add&middleware=auth_api [QSA,L]
+RewriteRule ^api/cart/delete index.php?controller=client/CartController&action=delete&middleware=auth_api [QSA,L]
+
+# CHECKOUT
+RewriteRule ^checkout$ index.php?controller=client/CheckoutController&action=show&middleware=auth [QSA,L]
+RewriteRule ^api/checkout$ index.php?controller=client/CheckoutController&action=payment&middleware=auth_api [QSA,L]
+
+
+# SEARCH
+RewriteRule ^search$ index.php?controller=client/SearchController&action=searchpage [QSA,L]
+RewriteRule ^api/search$ index.php?controller=client/SearchController&action=search [QSA,L]
+
+# PROFILE
+RewriteRule ^profile/(.*)$ index.php?controller=client/ProfileController&action=show_page&user_id=$1 [QSA,L]
+
+
+# CALLBACK
+RewriteRule ^callback/vnpay$ index.php?controller=client/CallbackController&action=vnpay&middleware=auth_api [QSA,L]
+
+
+## ADMIN
+RewriteRule ^admin/dashboard$ index.php?controller=admin/DashboardController&action=show&middleware=admin [QSA,L]
+RewriteRule ^admin/user$ index.php?controller=admin/UserController&action=show&middleware=admin [QSA,L]
+RewriteRule ^api/admin/user/info$ index.php?controller=admin/UserController&action=info&middleware=admin_api [QSA,L]
+RewriteRule ^api/admin/user/save$ index.php?controller=admin/UserController&action=save&middleware=admin_api [QSA,L]
+RewriteRule ^admin/invoice$ index.php?controller=admin/InvoiceController&action=show&middleware=admin [QSA,L]
+RewriteRule ^admin/invoice/(.*)$ index.php?controller=admin/InvoiceController&action=details&middleware=admin&invoice_id=$1 [QSA,L]
+
