@@ -104,7 +104,7 @@ class AuthController
             $mail->Host = 'mail49.vietnix.vn';
             $mail->SMTPAuth = true;
             $mail->Username = 'noreply@mail.shoperis.net';
-            $mail->Password = '@Eris0963@';
+            $mail->Password = '';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port = 465;
             $mail->CharSet = 'UTF-8';
